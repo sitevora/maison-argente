@@ -1,15 +1,13 @@
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { QueryClient } from "@tanstack/react-query";
 import {
   Outlet,
   Link,
   createRootRouteWithContext,
   useRouter,
   HeadContent,
-  Scripts,
 } from "@tanstack/react-router";
-import { useEffect, type ReactNode } from "react";
+import { useEffect } from "react";
 
-import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { SiteHeader } from "../components/SiteHeader";
 import { SiteFooter } from "../components/SiteFooter";
@@ -56,11 +54,8 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
 export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()({
   head: () => ({
     meta: [
-      { charSet: "utf-8" },
-      { name: "viewport", content: "width=device-width, initial-scale=1" },
       { title: "Maison Argenté — Modern European Fine Dining in Mayfair, London" },
       { name: "description", content: "Seasonal European cuisine in the heart of Mayfair. Reserve your table at Maison Argenté for an evening to savour." },
-      { name: "author", content: "Maison Argenté" },
       { property: "og:title", content: "Maison Argenté — Modern European Fine Dining in Mayfair, London" },
       { property: "og:description", content: "Seasonal European cuisine in the heart of Mayfair. Reserve your table at Maison Argenté for an evening to savour." },
       { property: "og:type", content: "website" },
@@ -68,48 +63,22 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { name: "twitter:card", content: "summary_large_image" },
       { name: "twitter:title", content: "Maison Argenté — Modern European Fine Dining in Mayfair, London" },
       { name: "twitter:description", content: "Seasonal European cuisine in the heart of Mayfair. Reserve your table at Maison Argenté for an evening to savour." },
-      { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/a58761d2-babf-465a-b4bd-428e68ba1cab/id-preview-7e9a33b5--bec85e29-7ef0-45ad-b6ee-fe29c0367e6d.lovable.app-1781783827217.png" },
-      { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/a58761d2-babf-465a-b4bd-428e68ba1cab/id-preview-7e9a33b5--bec85e29-7ef0-45ad-b6ee-fe29c0367e6d.lovable.app-1781783827217.png" },
-    ],
-    links: [
-      { rel: "stylesheet", href: appCss },
-      { rel: "preconnect", href: "https://fonts.googleapis.com" },
-      { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
-      {
-        rel: "stylesheet",
-        href: "https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,400;1,500&family=Inter:wght@300;400;500;600&display=swap",
-      },
     ],
   }),
-  shellComponent: RootShell,
   component: RootComponent,
   notFoundComponent: NotFoundComponent,
   errorComponent: ErrorComponent,
 });
 
-function RootShell({ children }: { children: ReactNode }) {
-  return (
-    <html lang="en">
-      <head>
-        <HeadContent />
-      </head>
-      <body>
-        {children}
-        <Scripts />
-      </body>
-    </html>
-  );
-}
-
 function RootComponent() {
-  const { queryClient } = Route.useRouteContext();
   return (
-    <QueryClientProvider client={queryClient}>
+    <>
+      <HeadContent />
       <SiteHeader />
       <main className="min-h-screen">
         <Outlet />
       </main>
       <SiteFooter />
-    </QueryClientProvider>
+    </>
   );
 }
